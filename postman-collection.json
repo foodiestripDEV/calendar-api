@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "calendar-api-collection",
+		"name": "Google Calendar & Tasks API",
+		"description": "Complete API collection for testing Google Calendar and Tasks integration",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Calendar Events",
+			"item": [
+				{
+					"name": "Create General Event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Team Meeting\",\n  \"description\": \"Weekly team sync meeting\",\n  \"startDateTime\": \"2025-09-20T10:00:00Z\",\n  \"endDateTime\": \"2025-09-20T11:00:00Z\",\n  \"location\": \"Conference Room A\",\n  \"timeZone\": \"UTC\",\n  \"attendees\": [\n    {\"email\": \"user1@example.com\"},\n    {\"email\": \"user2@example.com\"}\n  ],\n  \"reminders\": [\n    {\"method\": \"email\", \"minutes\": 1440},\n    {\"method\": \"popup\", \"minutes\": 30}\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/general",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"general"
+							]
+						},
+						"description": "Creates a general event visible to all calendar users"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Private Event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Private Meeting with Fatma\",\n  \"description\": \"Confidential discussion about project X\",\n  \"startDateTime\": \"2025-09-20T14:00:00Z\",\n  \"endDateTime\": \"2025-09-20T15:00:00Z\",\n  \"allowedUsers\": [\"fatma@example.com\"],\n  \"location\": \"Private Room\",\n  \"timeZone\": \"UTC\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/private",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"private"
+							]
+						},
+						"description": "Creates a private event visible only to specified users"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Updated Meeting Title\",\n  \"description\": \"Updated meeting description\",\n  \"startDateTime\": \"2025-09-20T15:00:00Z\",\n  \"endDateTime\": \"2025-09-20T16:00:00Z\",\n  \"location\": \"New Conference Room B\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/{{eventId}}?calendarId=primary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"{{eventId}}"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								}
+							]
+						},
+						"description": "Updates an existing calendar event"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/{{eventId}}?calendarId=primary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"{{eventId}}"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								}
+							]
+						},
+						"description": "Deletes a calendar event"
+					},
+					"response": []
+				}
+			],
+			"description": "Calendar event management endpoints"
+		},
+		{
+			"name": "Tasks Management",
+			"item": [
+				{
+					"name": "Get Task Lists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/tasks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						},
+						"description": "Retrieves all task lists for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"taskListId\": \"{{taskListId}}\",\n  \"title\": \"Complete project documentation\",\n  \"description\": \"Write comprehensive documentation for the new Calendar API\",\n  \"dueDate\": \"2025-09-25T18:00:00Z\",\n  \"status\": \"needsAction\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/tasks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						},
+						"description": "Creates a new task in the specified task list"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"taskListId\": \"{{taskListId}}\",\n  \"title\": \"Updated task title\",\n  \"description\": \"Updated task description\",\n  \"status\": \"completed\",\n  \"dueDate\": \"2025-09-26T18:00:00Z\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"{{taskId}}"
+							]
+						},
+						"description": "Updates an existing task"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/tasks/{{taskId}}?taskListId={{taskListId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"{{taskId}}"
+							],
+							"query": [
+								{
+									"key": "taskListId",
+									"value": "{{taskListId}}"
+								}
+							]
+						},
+						"description": "Deletes a task from the specified task list"
+					},
+					"response": []
+				}
+			],
+			"description": "Task management endpoints"
+		},
+		{
+			"name": "Health & Status",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Checks if the API server is running and healthy"
+					},
+					"response": []
+				},
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "Gets basic API information and status"
+					},
+					"response": []
+				}
+			],
+			"description": "API health and information endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Set dynamic variables",
+					"pm.globals.set('timestamp', new Date().toISOString());"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global response tests",
+					"pm.test('Response time is less than 5000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});",
+					"",
+					"pm.test('Response has valid JSON', function () {",
+					"    pm.response.to.be.json;",
+					"});",
+					"",
+					"// Store response data for chaining requests",
+					"if (pm.response.json().event && pm.response.json().event.id) {",
+					"    pm.globals.set('eventId', pm.response.json().event.id);",
+					"}",
+					"",
+					"if (pm.response.json().task && pm.response.json().task.id) {",
+					"    pm.globals.set('taskId', pm.response.json().task.id);",
+					"}",
+					"",
+					"if (pm.response.json().taskLists && pm.response.json().taskLists.length > 0) {",
+					"    pm.globals.set('taskListId', pm.response.json().taskLists[0].id);",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "eventId",
+			"value": "your-event-id-here",
+			"type": "string"
+		},
+		{
+			"key": "taskId",
+			"value": "your-task-id-here",
+			"type": "string"
+		},
+		{
+			"key": "taskListId",
+			"value": "your-task-list-id-here",
+			"type": "string"
+		}
+	]
+}
