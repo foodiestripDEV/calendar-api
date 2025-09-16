@@ -8,10 +8,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security Middleware
 app.use(helmet());
 
-// CORS Configuration
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
   credentials: true
@@ -27,14 +25,11 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Body Parsing Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Logging Middleware
 app.use(morgan('combined'));
 
-// Routes
 app.get('/', (req, res) => {
   res.json({
     message: 'Calendar API is running!',
@@ -51,11 +46,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Import and use API routes
-const calendarRoutes = require('./routes/calendar');
-app.use('/api/calendar', calendarRoutes);
-
-// 404 Handler
 app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Route not found',
@@ -64,7 +54,6 @@ app.use('*', (req, res) => {
   });
 });
 
-// Global Error Handler
 app.use((error, req, res, next) => {
   console.error('Error:', error);
   
@@ -80,7 +69,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-// Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Calendar API Server is running on port ${PORT}`);
   console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
