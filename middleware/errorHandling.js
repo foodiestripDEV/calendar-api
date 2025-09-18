@@ -1,5 +1,4 @@
 const secureErrorHandler = (error, req, res, next) => {
-  // Log the full error for debugging (server-side only) important
   console.error('[ERROR]', {
     timestamp: new Date().toISOString(),
     error: error.message,
@@ -10,12 +9,11 @@ const secureErrorHandler = (error, req, res, next) => {
     apiKey: req.apiKey?.substring(0, 8) + '***'
   });
 
-  // Determine error type and safe response
   let statusCode = 500;
   let message = 'Internal server error';
   let errorCode = 'INTERNAL_ERROR';
 
-  // Known error types with safe messages
+  // Known error types 
   if (error.name === 'ValidationError') {
     statusCode = 400;
     message = 'Invalid request data';
@@ -70,14 +68,12 @@ const generateRequestId = () => {
          Math.random().toString(36).substring(2, 15);
 };
 
-// Request ID middleware
 const addRequestId = (req, res, next) => {
   req.id = generateRequestId();
   res.setHeader('X-Request-ID', req.id);
   next();
 };
 
-// 404 handler
 const notFoundHandler = (req, res) => {
   console.warn(`[404] ${req.method} ${req.path} - IP: ${req.ip}`);
   

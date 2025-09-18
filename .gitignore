@@ -4,6 +4,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Google Service Account Keys (SECURITY)
+config/service-account-key.json
+*.json
+
 # Runtime data
 pids
 *.pid
