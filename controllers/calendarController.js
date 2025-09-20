@@ -146,6 +146,65 @@ class CalendarController {
       });
     }
   };
+
+  // GET COMMON/PUBLIC EVENTS
+  getCommonEvents = async (req, res) => {
+    try {
+      const { calendarId, timeMin, timeMax } = req.query;
+      
+      if (!calendarId) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId query parameter is required' 
+        });
+      }
+
+      const events = await this.calendarService.getCommonEvents(calendarId, timeMin, timeMax);
+      
+      res.json({ 
+        success: true, 
+        events,
+        count: events.length,
+        type: 'common/public'
+      });
+    } catch (error) {
+      console.error('Error getting common events:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
+  // GET PRIVATE EVENTS
+  getPrivateEvents = async (req, res) => {
+    try {
+      const { calendarId, timeMin, timeMax, userEmail } = req.query;
+      
+      if (!calendarId || !userEmail) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId and userEmail query parameters are required' 
+        });
+      }
+
+      const events = await this.calendarService.getPrivateEvents(calendarId, timeMin, timeMax, userEmail);
+      
+      res.json({ 
+        success: true, 
+        events,
+        count: events.length,
+        type: 'private',
+        userEmail
+      });
+    } catch (error) {
+      console.error('Error getting private events:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
 }
 
 module.exports = new CalendarController();

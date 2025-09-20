@@ -9,6 +9,8 @@ const {
 } = require("../middleware/validation");
 
 router.get("/events", validateQueryParams, calendarController.getEvents);
+router.get("/events/common", validateQueryParams, calendarController.getCommonEvents);
+router.get("/events/private", validateQueryParams, calendarController.getPrivateEvents);
 
 router.post(
   "/events/general",

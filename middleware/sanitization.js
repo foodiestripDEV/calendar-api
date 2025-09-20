@@ -54,6 +54,10 @@ const sanitizeInput = (req, res, next) => {
 };
 
 const preventSQLInjection = (req, res, next) => {
+  if (req.method !== 'POST' && req.method !== 'PUT') {
+    return next();
+  }
+  
   const sqlInjectionPatterns = [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
     /(;|\-\-|\/\*|\*\/)/g,

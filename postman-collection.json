@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Team Meeting\",\n  \"description\": \"Weekly team sync meeting\",\n  \"startDateTime\": \"2025-09-20T10:00:00Z\",\n  \"endDateTime\": \"2025-09-20T11:00:00Z\",\n  \"location\": \"Conference Room A\",\n  \"timeZone\": \"UTC\",\n  \"attendees\": [\n    {\"email\": \"user1@example.com\"},\n    {\"email\": \"user2@example.com\"}\n  ],\n  \"reminders\": [\n    {\"method\": \"email\", \"minutes\": 1440},\n    {\"method\": \"popup\", \"minutes\": 30}\n  ]\n}"
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Test Event from API\",\n  \"description\": \"Bu event Postman'den oluşturuldu ve Google Calendar'da görünecek\",\n  \"startDateTime\": \"2025-09-20T10:00:00Z\",\n  \"endDateTime\": \"2025-09-20T11:00:00Z\",\n  \"location\": \"Conference Room A\",\n  \"timeZone\": \"UTC\",\n  \"attendees\": [\n    {\"email\": \"SENIN_EMAIL_ADRESIN@gmail.com\"},\n    {\"email\": \"user2@example.com\"}\n  ],\n  \"reminders\": [\n    {\"method\": \"email\", \"minutes\": 1440},\n    {\"method\": \"popup\", \"minutes\": 30}\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/calendar/events/general",
@@ -66,6 +66,114 @@
 							]
 						},
 						"description": "Creates a private event visible only to specified users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events?calendarId=primary&timeMin=2024-01-01T00:00:00Z&timeMax=2025-12-31T23:59:59Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								},
+								{
+									"key": "timeMin",
+									"value": "2024-01-01T00:00:00Z"
+								},
+								{
+									"key": "timeMax",
+									"value": "2025-12-31T23:59:59Z"
+								}
+							]
+						},
+						"description": "Get all events from a calendar within a date range"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Common Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/common?calendarId=primary&timeMin=2024-01-01T00:00:00Z&timeMax=2025-12-31T23:59:59Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"common"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								},
+								{
+									"key": "timeMin",
+									"value": "2024-01-01T00:00:00Z"
+								},
+								{
+									"key": "timeMax",
+									"value": "2025-12-31T23:59:59Z"
+								}
+							]
+						},
+						"description": "Get only public/common events visible to all users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Private Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/private?calendarId=primary&userEmail=user@example.com&timeMin=2024-01-01T00:00:00Z&timeMax=2025-12-31T23:59:59Z",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"private"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								},
+								{
+									"key": "userEmail",
+									"value": "user@example.com"
+								},
+								{
+									"key": "timeMin",
+									"value": "2024-01-01T00:00:00Z"
+								},
+								{
+									"key": "timeMax",
+									"value": "2025-12-31T23:59:59Z"
+								}
+							]
+						},
+						"description": "Get private events where the specified user is an attendee"
 					},
 					"response": []
 				},
