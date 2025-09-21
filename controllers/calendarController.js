@@ -65,6 +65,46 @@ class CalendarController {
     }
   };
 
+  // 3. CREATE EVENT (Generic)
+  createEvent = async (req, res) => {
+    try {
+      const { calendarId, eventType, allowedUsers, ...eventData } = req.body;
+      
+      if (!calendarId || !eventData.title) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId and title are required' 
+        });
+      }
+
+      let event;
+      let message;
+
+      // Event type'a göre uygun service method'unu çağır
+      if (eventType === 'private' && allowedUsers?.length > 0) {
+        event = await this.calendarService.createPrivateEvent(calendarId, eventData, allowedUsers);
+        message = 'Private event created successfully';
+      } else {
+        // Default: general/common event
+        event = await this.calendarService.createGeneralEvent(calendarId, eventData);
+        message = 'General event created successfully';
+      }
+      
+      res.status(201).json({ 
+        success: true, 
+        event,
+        message,
+        type: eventType || 'general'
+      });
+    } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
   // 4. UPDATE EVENT (Generic)
   updateEvent = async (req, res) => {
     try {
@@ -180,6 +220,11 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
+      // Eğer service'den success: false geliyorsa, error response dön
+      if (result.success === false) {
+        return res.status(404).json(result);
+      }
+      
       res.json(result);
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -205,6 +250,15 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
+      // Eğer service'den success: false geliyorsa, error response dön
+      if (result.success === false) {
+        return res.status(404).json({
+          ...result,
+          type: 'common'
+        });
+      }
+      
+      // Success durumu
       res.json({
         ...result,
         message: 'Common event deleted successfully',
@@ -234,6 +288,15 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
+      // Eğer service'den success: false geliyorsa, error response dön
+      if (result.success === false) {
+        return res.status(404).json({
+          ...result,
+          type: 'private'
+        });
+      }
+      
+      // Success durumu
       res.json({
         ...result,
         message: 'Private event deleted successfully',

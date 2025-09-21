@@ -12,6 +12,13 @@ router.get("/events/common", validateQueryParams, calendarController.getCommonEv
 router.get("/events/private", validateQueryParams, calendarController.getPrivateEvents);
 router.get("/events", validateQueryParams, calendarController.getEvents);
 
+// Create routes
+router.post(
+  "/events",
+  validateGeneralEvent, // Generic validation kullan
+  calendarController.createEvent
+);
+
 router.post(
   "/events/general",
   validateGeneralEvent,

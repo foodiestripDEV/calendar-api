@@ -10,6 +10,35 @@
 			"name": "Calendar Events",
 			"item": [
 				{
+					"name": "Create Event (Generic)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Generic Event\",\n  \"description\": \"This event can be general or private based on eventType\",\n  \"startDateTime\": \"2025-09-28T10:00:00Z\",\n  \"endDateTime\": \"2025-09-28T11:00:00Z\",\n  \"location\": \"Flexible Room\",\n  \"timeZone\": \"UTC\",\n  \"eventType\": \"general\",\n  \"allowedUsers\": []\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events"
+							]
+						},
+						"description": "Creates an event - can be general or private based on eventType parameter"
+					},
+					"response": []
+				},
+				{
 					"name": "Create General Event",
 					"request": {
 						"method": "POST",
