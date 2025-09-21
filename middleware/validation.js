@@ -191,6 +191,7 @@ const validateQueryParams = (req, res, next) => {
   const querySchema = Joi.object({
     calendarId: Joi.string(),
     taskListId: Joi.string(),
+    userEmail: Joi.string().email(), // Private events için gerekli
     timeMin: Joi.date().iso(),
     timeMax: Joi.date()
       .iso()

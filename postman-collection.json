@@ -214,6 +214,68 @@
 					"response": []
 				},
 				{
+					"name": "Update Common Event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Updated Common Event\",\n  \"description\": \"Updated common event description\",\n  \"startDateTime\": \"2025-09-27T15:00:00Z\",\n  \"endDateTime\": \"2025-09-27T16:00:00Z\",\n  \"location\": \"Updated Conference Room\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/common/{{eventId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"common",
+								"{{eventId}}"
+							]
+						},
+						"description": "Updates a common/public event"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Private Event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calendarId\": \"primary\",\n  \"title\": \"Updated Private Event\",\n  \"description\": \"Updated private event description\",\n  \"startDateTime\": \"2025-09-27T16:00:00Z\",\n  \"endDateTime\": \"2025-09-27T17:00:00Z\",\n  \"location\": \"Updated Private Room\",\n  \"allowedUsers\": [\"user1@example.com\", \"user2@example.com\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/private/{{eventId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"private",
+								"{{eventId}}"
+							]
+						},
+						"description": "Updates a private event"
+					},
+					"response": []
+				},
+				{
 					"name": "Delete Event",
 					"request": {
 						"method": "DELETE",
@@ -237,6 +299,62 @@
 							]
 						},
 						"description": "Deletes a calendar event"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Common Event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/common/{{eventId}}?calendarId=primary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"common",
+								"{{eventId}}"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								}
+							]
+						},
+						"description": "Deletes a common/public event"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Private Event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/calendar/events/private/{{eventId}}?calendarId=primary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"calendar",
+								"events",
+								"private",
+								"{{eventId}}"
+							],
+							"query": [
+								{
+									"key": "calendarId",
+									"value": "primary"
+								}
+							]
+						},
+						"description": "Deletes a private event"
 					},
 					"response": []
 				}

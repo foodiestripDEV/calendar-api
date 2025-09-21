@@ -65,7 +65,7 @@ class CalendarController {
     }
   };
 
-  // 4. UPDATE EVENT
+  // 4. UPDATE EVENT (Generic)
   updateEvent = async (req, res) => {
     try {
       const { eventId } = req.params;
@@ -94,7 +94,78 @@ class CalendarController {
     }
   };
 
-  // DELETE EVENT
+  // UPDATE COMMON EVENT
+  updateCommonEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const { calendarId, ...updateData } = req.body;
+      
+      if (!calendarId) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId is required' 
+        });
+      }
+
+      // Force public visibility for common events
+      updateData.visibility = 'public';
+
+      const event = await this.calendarService.updateEvent(calendarId, eventId, updateData);
+      
+      res.json({ 
+        success: true, 
+        event,
+        message: 'Common event updated successfully',
+        type: 'common'
+      });
+    } catch (error) {
+      console.error('Error updating common event:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
+  // UPDATE PRIVATE EVENT
+  updatePrivateEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const { calendarId, allowedUsers, ...updateData } = req.body;
+      
+      if (!calendarId) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId is required' 
+        });
+      }
+
+      // Force private visibility and add users to description
+      updateData.visibility = 'private';
+      if (allowedUsers && allowedUsers.length > 0) {
+        const usersText = `\n\nPrivate Event - Intended for: ${allowedUsers.join(', ')}`;
+        updateData.description = (updateData.description || '') + usersText;
+      }
+
+      const event = await this.calendarService.updateEvent(calendarId, eventId, updateData);
+      
+      res.json({ 
+        success: true, 
+        event,
+        message: 'Private event updated successfully',
+        type: 'private',
+        allowedUsers
+      });
+    } catch (error) {
+      console.error('Error updating private event:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
+  // DELETE EVENT (Generic)
   deleteEvent = async (req, res) => {
     try {
       const { eventId } = req.params;
@@ -112,6 +183,64 @@ class CalendarController {
       res.json(result);
     } catch (error) {
       console.error('Error deleting event:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
+  // DELETE COMMON EVENT
+  deleteCommonEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const { calendarId } = req.query;
+      
+      if (!calendarId) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId query parameter is required' 
+        });
+      }
+
+      const result = await this.calendarService.deleteEvent(calendarId, eventId);
+      
+      res.json({
+        ...result,
+        message: 'Common event deleted successfully',
+        type: 'common'
+      });
+    } catch (error) {
+      console.error('Error deleting common event:', error);
+      res.status(500).json({ 
+        success: false,
+        error: error.message 
+      });
+    }
+  };
+
+  // DELETE PRIVATE EVENT
+  deletePrivateEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+      const { calendarId } = req.query;
+      
+      if (!calendarId) {
+        return res.status(400).json({ 
+          success: false,
+          error: 'calendarId query parameter is required' 
+        });
+      }
+
+      const result = await this.calendarService.deleteEvent(calendarId, eventId);
+      
+      res.json({
+        ...result,
+        message: 'Private event deleted successfully',
+        type: 'private'
+      });
+    } catch (error) {
+      console.error('Error deleting private event:', error);
       res.status(500).json({ 
         success: false,
         error: error.message 
