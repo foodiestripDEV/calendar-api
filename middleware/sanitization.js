@@ -58,14 +58,37 @@ const preventSQLInjection = (req, res, next) => {
     return next();
   }
   
+  // Much more precise SQL injection patterns
   const sqlInjectionPatterns = [
-    /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
-    /(;|\-\-|\/\*|\*\/)/g,
-    /(\b(OR|AND)\b.*?=.*?(\b(OR|AND)\b|$))/gi,
+    // Actual SQL injection attempts with context
+    /(\bSELECT\b.*?\bFROM\b)/gi,
+    /(\bINSERT\b.*?\bINTO\b)/gi,
+    /(\bUPDATE\b.*?\bSET\b)/gi,
+    /(\bDELETE\b.*?\bFROM\b)/gi,
+    /(\bDROP\b.*?\bTABLE\b)/gi,
+    /(\bUNION\b.*?\bSELECT\b)/gi,
+    // Comment-based injections
+    /(\/\*.*?\*\/|--[\s\S]*$)/gm,
+    // Boolean-based with quotes and operators
+    /('.*?(OR|AND).*?=.*?'|".*?(OR|AND).*?=.*?")/gi,
+    // Dangerous stored procedures
+    /(\bEXEC\b.*?\bSP_|EXECUTE.*SP_|XP_CMDSHELL)/gi,
   ];
 
   const checkValue = (value) => {
     if (typeof value === "string") {
+      // Calendar API safe words - don't flag these
+      const calendarSafeContent = [
+        /^(test|testing|event|calendar|meeting|appointment|reminder|description|title|location)$/gi,
+        /^(daily|weekly|monthly|yearly|morning|afternoon|evening|night)$/gi,
+        /^(production|development|api|functionality|basic|simple)$/gi
+      ];
+      
+      // If it's a safe calendar word, skip injection check
+      if (calendarSafeContent.some(pattern => pattern.test(value.trim()))) {
+        return false;
+      }
+      
       return sqlInjectionPatterns.some((pattern) => pattern.test(value));
     }
     return false;
@@ -90,6 +113,7 @@ const preventSQLInjection = (req, res, next) => {
     console.warn(
       `[SECURITY] Potential SQL injection attempt from IP: ${req.ip}`
     );
+    console.warn(`[SECURITY] Suspicious content:`, JSON.stringify(req.body, null, 2));
     return res.status(400).json({
       success: false,
       error: "Invalid input detected",

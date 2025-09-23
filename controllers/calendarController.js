@@ -80,7 +80,6 @@ class CalendarController {
       let event;
       let message;
 
-      // Event type'a göre uygun service method'unu çağır
       if (eventType === 'private' && allowedUsers?.length > 0) {
         event = await this.calendarService.createPrivateEvent(calendarId, eventData, allowedUsers);
         message = 'Private event created successfully';
@@ -220,7 +219,6 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
-      // Eğer service'den success: false geliyorsa, error response dön
       if (result.success === false) {
         return res.status(404).json(result);
       }
@@ -250,7 +248,6 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
-      // Eğer service'den success: false geliyorsa, error response dön
       if (result.success === false) {
         return res.status(404).json({
           ...result,
@@ -258,7 +255,6 @@ class CalendarController {
         });
       }
       
-      // Success durumu
       res.json({
         ...result,
         message: 'Common event deleted successfully',
@@ -288,7 +284,6 @@ class CalendarController {
 
       const result = await this.calendarService.deleteEvent(calendarId, eventId);
       
-      // Eğer service'den success: false geliyorsa, error response dön
       if (result.success === false) {
         return res.status(404).json({
           ...result,
@@ -296,7 +291,6 @@ class CalendarController {
         });
       }
       
-      // Success durumu
       res.json({
         ...result,
         message: 'Private event deleted successfully',
@@ -394,6 +388,45 @@ class CalendarController {
       res.status(500).json({ 
         success: false,
         error: error.message 
+      });
+    }
+  };
+
+  // Debug endpoint to check calendar access
+  checkCalendarAccess = async (req, res) => {
+    try {
+      const calendarInfo = await this.calendarService.getCalendarInfo();
+      
+      res.json({
+        success: true,
+        data: calendarInfo,
+        message: 'Calendar access verified'
+      });
+    } catch (error) {
+      console.error('Error checking calendar access:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+  };
+
+  // Test endpoint to create and verify event
+  testEventCreation = async (req, res) => {
+    try {
+      const { calendarId } = req.body;
+      const result = await this.calendarService.testEventCreation(calendarId || 'primary');
+      
+      res.json({
+        success: true,
+        event: result,
+        message: 'Test event created successfully. Check your calendar!'
+      });
+    } catch (error) {
+      console.error('Error in test event creation:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message
       });
     }
   };

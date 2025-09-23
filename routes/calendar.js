@@ -12,10 +12,9 @@ router.get("/events/common", validateQueryParams, calendarController.getCommonEv
 router.get("/events/private", validateQueryParams, calendarController.getPrivateEvents);
 router.get("/events", validateQueryParams, calendarController.getEvents);
 
-// Create routes
 router.post(
   "/events",
-  validateGeneralEvent, // Generic validation kullan
+  validateGeneralEvent, 
   calendarController.createEvent
 );
 
@@ -31,7 +30,6 @@ router.post(
   calendarController.createPrivateEvent
 );
 
-// Update routes
 router.put(
   "/events/common/:eventId", 
   validateEventUpdate,
@@ -50,9 +48,11 @@ router.put(
   calendarController.updateEvent
 );
 
-// Delete routes  
 router.delete("/events/common/:eventId", calendarController.deleteCommonEvent);
 router.delete("/events/private/:eventId", calendarController.deletePrivateEvent);
 router.delete("/events/:eventId", calendarController.deleteEvent);
+
+router.get("/debug/calendar-access", calendarController.checkCalendarAccess);
+router.post("/debug/test-event", calendarController.testEventCreation);
 
 module.exports = router;

@@ -99,7 +99,7 @@ app.use(express.urlencoded({
 
 // Input sanitization
 app.use(sanitizeInput);
-app.use(preventSQLInjection);
+app.use(preventSQLInjection); // Re-enabled with improved logic
 
 app.use(morgan('combined'));
 
